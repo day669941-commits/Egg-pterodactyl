@@ -1,0 +1,41 @@
+{
+    "_comment": "Egg SA-MP (0.3.7 R2-1) - No RCON Version by ZaleeHost",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-11-03T00:00:00+00:00",
+    "name": "SA-MP (0.3.7 R2-1 - No RCON)",
+    "author": "support@zaleehost.qzz.io",
+    "description": "San Andreas Multiplayer Dedicated Server (v0.3.7 R2-1) tanpa RCON password. Aman dan ringan untuk server publik.",
+    "features": null,
+    "docker_images": {
+        "Debian (latest)": "ghcr.io/parkervcp/games:samp"
+    },
+    "file_denylist": [],
+    "startup": "./samp03svr",
+    "config": {
+        "files": "{\r\n    \"server.cfg\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"port\": \"port {{server.build.default.port}}\",\r\n            \"hostname\": \"hostname {{server.build.env.SERVER_NAME}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Started server on\"\r\n}",
+        "logs": "{}",
+        "stop": "killall samp03svr"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\r\ncd /tmp || exit\r\necho \"Downloading SA-MP 0.3.7 R2-1 Server (No RCON)...\"\r\ncurl -sSL -o samp.tar.gz https://files.sa-mp.com/samp037svr_R2-1.tar.gz\r\nmkdir -p /mnt/server\r\ntar -xzf samp.tar.gz --strip-components=1 -C /mnt/server\r\nrm -f samp.tar.gz\r\ncd /mnt/server || exit\r\nchmod +x samp03svr\r\nmkdir -p scriptfiles\r\necho \"hostname ${SERVER_NAME}\" > /mnt/server/server.cfg\r\necho \"gamemode0 grandlarc 1\" >> /mnt/server/server.cfg\r\necho \"port {{server.build.default.port}}\" >> /mnt/server/server.cfg\r\necho \"maxplayers 50\" >> /mnt/server/server.cfg\r\necho \"announce 1\" >> /mnt/server/server.cfg\r\necho \"query 1\" >> /mnt/server/server.cfg\r\necho \"weburl www.sa-mp.com\" >> /mnt/server/server.cfg\r\necho \"onfoot_rate 40\" >> /mnt/server/server.cfg\r\necho \"incar_rate 40\" >> /mnt/server/server.cfg\r\necho \"weapon_rate 40\" >> /mnt/server/server.cfg\r\necho \"stream_distance 300.0\" >> /mnt/server/server.cfg\r\necho \"stream_rate 1000\" >> /mnt/server/server.cfg\r\necho \"plugins streamer.so\" >> /mnt/server/server.cfg\r\necho \"--------------------------------------\"\r\necho \"SA-MP No RCON installation finished!\"\r\necho \"--------------------------------------\"",
+            "container": "ghcr.io/parkervcp/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Server Name",
+            "description": "Nama yang akan muncul di browser SA-MP.",
+            "env_variable": "SERVER_NAME",
+            "default_value": "ZaleeHost SA-MP Server (No RCON)",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100"
+        }
+    ]
+}
